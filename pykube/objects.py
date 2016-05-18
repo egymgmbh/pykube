@@ -194,6 +194,11 @@ class Pod(NamespacedAPIObject):
         condition = next((c for c in cs if c["type"] == "Ready"), None)
         return condition is not None and condition["status"] == "True"
 
+    def logs(self, **kwargs):
+        r = self.api.get(**self.api_kwargs(operation='log', **kwargs))
+        r.raise_for_status()
+        return r.text
+
 
 class ReplicationController(NamespacedAPIObject, ReplicatedAPIObject):
 
