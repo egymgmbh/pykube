@@ -185,6 +185,10 @@ class Pod(NamespacedAPIObject):
         condition = next((c for c in cs if c["type"] == "Ready"), None)
         return condition is not None and condition["status"] == "True"
 
+    @property
+    def logs(self):
+        return self.api.get(**self.api_kwargs(operation='logs'))
+
 
 class ReplicationController(NamespacedAPIObject, ReplicatedMixin, ScalableMixin):
 
