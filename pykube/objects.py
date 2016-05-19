@@ -190,10 +190,13 @@ class Pod(NamespacedAPIObject):
         r.raise_for_status()
         return r.text
 
-    def status(self, **kwargs):
-        r = self.api.get(**self.api_kwargs(operation='status', **kwargs))
-        r.raise_for_status()
-        return r.text
+    @property
+    def status(self):
+        self.reload()
+        return self.obj['status']['phase']
+        # r = self.api.get(**self.api_kwargs(operation='status', **kwargs))
+        # r.raise_for_status()
+        # return r.text
 
 
 class ReplicationController(NamespacedAPIObject, ReplicatedMixin, ScalableMixin):
