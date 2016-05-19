@@ -199,6 +199,11 @@ class Pod(NamespacedAPIObject):
         r.raise_for_status()
         return r.text
 
+    @property
+    def status(self):
+        self.reload()
+        return self.obj['status']['phase']
+
 
 class ReplicationController(NamespacedAPIObject, ReplicatedAPIObject):
 
