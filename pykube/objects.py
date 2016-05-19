@@ -190,9 +190,12 @@ class Pod(NamespacedAPIObject):
 
     @property
     def ready(self):
+        self.reload()
         cs = self.obj["status"]["conditions"]
-        condition = next((c for c in cs if c["type"] == "Ready"), None)
-        return condition is not None and condition["status"] == "True"
+        for condition in cs:
+            if condition["type"] == "Ready":
+                return condition["status"] == "True"
+        return False
 
     def logs(self, **kwargs):
         r = self.api.get(**self.api_kwargs(operation='log', **kwargs))
